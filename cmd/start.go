@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/ko07ga/kadou/lib/redis"
+	"github.com/ko07ga/kadou/lib/sqlite3"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,13 @@ var startCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
 		rc := redis.NewClient(ctx)
+		sc := sqlite3.NewClient(ctx)
+		defer sc.Close()
+
+		var stampleAt int
+		var kadouType string
+		sc.Read("SELECT stamped_at,kadou_type from kadous", &stampleAt, &kadouType)
+		sc.Exec(fmt.Sprintf("INSERT INTO kadous(stamped_at,kadou_type) VALUES(%d,'開始')", time.Now().UnixMicro()))
 		todayStart := fmt.Sprintf(
 			"%s-start",
 			time.Now().Format("2006-01-02"))

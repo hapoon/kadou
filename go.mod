@@ -3,6 +3,7 @@ module github.com/ko07ga/kadou
 go 1.23.5
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/spf13/cobra v1.8.1
 )
